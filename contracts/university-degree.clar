@@ -42,3 +42,10 @@
      (var-set next-degree-id (+ degree-id u1))
      (ok degree-id)))
 
+;; Get degree details
+(define-read-only (get-degree-details (degree-id uint))
+  (map-get? Degrees degree-id))
+
+;; Get all degrees issued by a university
+(define-read-only (get-university-degrees (university principal))
+  (map-get? UniversityDegrees university))
