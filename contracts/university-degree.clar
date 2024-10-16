@@ -16,3 +16,14 @@
 
 ;; NFT definitions
 (define-non-fungible-token Degree uint)
+
+;; Functions
+
+;; Register a new university
+(define-public (register-university (university principal))
+  (begin
+    (asserts! (is-eq tx-sender contract-owner) err-owner-only)
+    (asserts! (is-none (map-get? Universities university)) err-already-exists)
+    (ok (map-set Universities university true))))
+
+ 
