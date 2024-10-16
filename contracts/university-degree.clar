@@ -26,4 +26,19 @@
     (asserts! (is-none (map-get? Universities university)) err-already-exists)
     (ok (map-set Universities university true))))
 
- 
+ ;; Issue a new degree
+ (define-public (issue-degree (recipient principal) (metadata (string-ascii 256)))
+   (let
+     ((university tx-sender)
+      (degree-id (var-get next-degree-id)))
+     (asserts! (is-some (map-get? Universities university)) err-not-found)
+     (try! (nft-mint? Degree degree-id recipient))
+     (map-set Degrees degree-id {university: university, recipient: recipient, metadata: metadata})
+     (map-set UniversityDegrees
+              university
+              (unwrap-panic (as-max-len?
+                (append (default-to (list) (map-get? UniversityDegrees university)) degree-id)
+                u100)))
+     (var-set next-degree-id (+ degree-id u1))
+     (ok degree-id)))
+
