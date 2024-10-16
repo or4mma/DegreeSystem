@@ -49,3 +49,19 @@
 ;; Get all degrees issued by a university
 (define-read-only (get-university-degrees (university principal))
   (map-get? UniversityDegrees university))
+
+;; Verify a degree
+(define-read-only (verify-degree (degree-id uint) (university principal) (recipient principal))
+  (match (map-get? Degrees degree-id)
+    degree (and
+            (is-eq (get university degree) university)
+            (is-eq (get recipient degree) recipient))
+    false))
+
+;; Staking system (placeholder for future implementation)
+(define-public (stake-for-certification (degree-id uint) (amount uint))
+  (err "Not implemented"))
+
+;; Initialize contract
+(begin
+  (map-set Universities contract-owner true))
